@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testes</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Yellowtail&family=Unbounded:wght@600;800&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --ink: #08070c;
+            --panel: #131019;
+            --line: #2c2438;
+            --text: #f5f3fa;
+            --muted: #8a80a0;
+            --amber: #a855f7;
+            --amber-dim: #7e22ce;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 50% 0%, #241a33 0%, var(--ink) 55%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text);
+            overflow: hidden;
+        }
+
+        /* faint grid backdrop */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--line) 1px, transparent 1px);
+            background-size: 48px 48px;
+            opacity: 0.25;
+            mask-image: radial-gradient(circle at 50% 40%, black, transparent 70%);
+            pointer-events: none;
+        }
+
+        .stage {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            padding: 0 24px;
+            text-align: center;
+        }
+
+        .glyph {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 0 0 18px;
+        }
+
+        .glyph span {
+            color: var(--amber);
+        }
+
+        h1 {
+            font-family: 'Yellowtail', cursive;
+            font-size: 52px;
+            font-weight: 400;
+            letter-spacing: 0;
+            margin: 0 0 8px;
+        }
+
+        h1 .hash {
+            color: var(--amber);
+            font-weight: 500;
+        }
+
+        h1 .black {
+            color: #000000;
+        }
+
+        p.sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--muted);
+            margin: 0 0 40px;
+        }
+
+        div {
+            display: flex;
+            justify-content: center;
+        }
+
+        form {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 0;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 6px;
+            box-shadow:
+                0 20px 50px -20px rgba(0, 0, 0, 0.6),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        form:focus-within {
+            border-color: var(--amber-dim);
+            box-shadow:
+                0 20px 50px -20px rgba(0, 0, 0, 0.6),
+                0 0 0 3px rgba(168, 85, 247, 0.18);
+        }
+
+        input[type="text"] {
+            flex: 1;
+            min-width: 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            padding: 14px 16px;
+        }
+
+        input[type="text"]::placeholder {
+            color: var(--muted);
+        }
+
+        button {
+            flex-shrink: 0;
+            border: none;
+            border-radius: 9px;
+            background: var(--amber);
+            color: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 0.02em;
+            padding: 13px 22px;
+            cursor: pointer;
+            transition: background 0.2s ease, transform 0.15s ease;
+        }
+
+        button:hover {
+            background: #c084fc;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        button:focus-visible,
+        input:focus-visible {
+            outline: 2px solid var(--amber);
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                transition: none !important;
+            }
+        }
+
+        @media (max-width: 420px) {
+            form {
+                flex-direction: column;
+                border-radius: 16px;
+                padding: 10px;
+            }
+
+            input[type="text"] {
+                width: 100%;
+                text-align: center;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stage" style="display:block;">
+        <p class="glyph">buscar</p>
+        <h1><span class="hash">#</span>hanNa<span class="black">API</span></h1>
+        <p class="sub">informe uma tag</p>
+        <div>
+            <form action="/buscar", method="POST">
+                <input type="text" name="tag" placeholder="Digite sua tag">
+                <button type="submit">Buscar</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

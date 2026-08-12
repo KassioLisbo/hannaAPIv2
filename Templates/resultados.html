@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultado</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Yellowtail&family=Unbounded:wght@600;800&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --ink: #08070c;
+            --panel: #131019;
+            --panel-2: #17131f;
+            --line: #2c2438;
+            --text: #f5f3fa;
+            --muted: #8a80a0;
+            --amber: #a855f7;
+            --amber-dim: #7e22ce;
+            --pvp: #f5f3fa;
+            --trail: #a855f7;
+            --vitoria: #4ade80;
+            --derrota: #f87171;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            background: radial-gradient(circle at 50% 0%, #241a33 0%, var(--ink) 55%);
+            font-family: 'Space Grotesk', sans-serif;
+            color: var(--text);
+            padding: 56px 20px;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(var(--line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--line) 1px, transparent 1px);
+            background-size: 48px 48px;
+            opacity: 0.2;
+            mask-image: radial-gradient(circle at 50% 30%, black, transparent 70%);
+            pointer-events: none;
+        }
+
+        .stage {
+            position: relative;
+            width: 100%;
+            max-width: 560px;
+        }
+
+        .glyph {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--muted);
+            text-align: center;
+            margin: 0 0 6px;
+        }
+
+        .brand {
+            font-family: 'Yellowtail', cursive;
+            font-size: 34px;
+            text-align: center;
+            margin: 0 0 36px;
+            color: var(--text);
+        }
+
+        .brand .hash {
+            color: var(--amber);
+        }
+
+        /* card do jogador */
+        .player-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 32px 28px;
+            box-shadow:
+                0 25px 60px -25px rgba(0, 0, 0, 0.65),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            margin-bottom: 28px;
+        }
+
+        .player-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            padding-bottom: 22px;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 22px;
+        }
+
+        .player-id {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .player-nome {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .player-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--muted);
+            letter-spacing: 0.04em;
+        }
+
+        .avatar {
+            width: 54px;
+            height: 54px;
+            flex-shrink: 0;
+            border-radius: 14px;
+            background: linear-gradient(150deg, var(--amber), var(--amber-dim));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 800;
+            font-size: 20px;
+            color: #ffffff;
+        }
+
+        .trofeus {
+            display: flex;
+            align-items: baseline;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .trofeus-num {
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 800;
+            font-size: 40px;
+            color: var(--amber);
+            line-height: 1;
+        }
+
+        .trofeus-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+        }
+
+        /* resumo de batalhas */
+        .summary {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .summary-chip {
+            flex: 1;
+            background: var(--panel-2);
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            padding: 14px 16px;
+            text-align: center;
+        }
+
+        .summary-chip .num {
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+        }
+
+        .summary-chip.pvp .num { color: var(--pvp); }
+        .summary-chip.trail .num { color: var(--trail); }
+
+        .summary-chip .label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        /* card de estatisticas com pizza */
+        .stats-card {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 28px;
+            box-shadow:
+                0 25px 60px -25px rgba(0, 0, 0, 0.65),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .pie {
+            flex-shrink: 0;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pie-hole {
+            width: 138px;
+            height: 138px;
+            border-radius: 50%;
+            background: var(--panel);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 800;
+            font-size: 30px;
+            color: var(--text);
+            text-align: center;
+            line-height: 1.1;
+        }
+
+        .pie-hole small {
+            display: block;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 400;
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            color: var(--muted);
+            margin-top: 4px;
+        }
+
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .legend-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+        }
+
+        .legend-row .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .legend-row .dot.vitoria { background: var(--vitoria); }
+        .legend-row .dot.derrota { background: var(--derrota); }
+
+        .legend-row .count {
+            font-family: 'Unbounded', sans-serif;
+            font-weight: 800;
+            margin-left: auto;
+        }
+
+        /* lista de batalhas */
+        .battles-card {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 24px 24px 8px;
+            box-shadow:
+                0 25px 60px -25px rgba(0, 0, 0, 0.65),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .battles-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin: 0 0 16px;
+        }
+
+        .battles-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-bottom: 24px;
+        }
+
+        .battle-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--line);
+            background: var(--panel-2);
+            color: var(--text);
+        }
+
+        .battle-chip .dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+        }
+
+        .battle-chip .dot.vitoria { background: var(--vitoria); }
+        .battle-chip .dot.derrota { background: var(--derrota); }
+
+        @media (max-width: 480px) {
+            .player-top {
+                flex-direction: row-reverse;
+            }
+            .trofeus-num {
+                font-size: 34px;
+            }
+            .stats-card {
+                gap: 18px;
+                padding: 24px 20px;
+            }
+            .pie {
+                width: 160px;
+                height: 160px;
+            }
+            .pie-hole {
+                width: 108px;
+                height: 108px;
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="stage">
+        {% set total = dados.batalhas|length %}
+        {% set vitorias = dados.batalhas|selectattr('resultado', 'equalto', 'Vitoria')|list|length %}
+        {% set derrotas = total - vitorias %}
+        {% set vit_pct = (vitorias / total * 100) if total > 0 else 0 %}
+
+        <p class="glyph">resultado</p>
+        <p class="brand"><span class="hash">#</span>hanNaAPI</p>
+
+        <div class="player-card">
+            <div class="player-top">
+                <div class="player-id">
+                    <span class="player-nome">{{ dados.player.nome }}</span>
+                    <span class="player-tag">{{ dados.player.tag }}</span>
+                </div>
+                <div class="avatar">{{ dados.player.nome|first|upper }}</div>
+            </div>
+
+            <div class="trofeus">
+                <span class="trofeus-num">{{ dados.player.trofeus }}</span>
+                <span class="trofeus-label">troféus</span>
+            </div>
+        </div>
+
+        <div class="summary">
+            <div class="summary-chip pvp">
+                <div class="num">{{ dados.batalhas|selectattr('tipo', 'equalto', 'PvP')|list|length }}</div>
+                <div class="label">PvP</div>
+            </div>
+            <div class="summary-chip trail">
+                <div class="num">{{ dados.batalhas|selectattr('tipo', 'equalto', 'trail')|list|length }}</div>
+                <div class="label">Trail</div>
+            </div>
+            <div class="summary-chip">
+                <div class="num">{{ total }}</div>
+                <div class="label">Total</div>
+            </div>
+        </div>
+
+        <div class="stats-card">
+            <div class="pie" style="background: conic-gradient(var(--vitoria) 0% {{ vit_pct }}%, var(--derrota) {{ vit_pct }}% 100%);">
+                <div class="pie-hole">
+                    {{ vit_pct|round(0, 'common')|int }}%
+                    <small>vitórias</small>
+                </div>
+            </div>
+            <div class="legend">
+                <div class="legend-row">
+                    <span class="dot vitoria"></span>
+                    Vitórias
+                    <span class="count">{{ vitorias }}</span>
+                </div>
+                <div class="legend-row">
+                    <span class="dot derrota"></span>
+                    Derrotas
+                    <span class="count">{{ derrotas }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="battles-card">
+            <p class="battles-title">batalhas recentes</p>
+            <div class="battles-grid">
+                {% for batalha in dados.batalhas %}
+                <span class="battle-chip">
+                    <span class="dot {{ batalha.resultado|lower }}"></span>{{ batalha.tipo }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
