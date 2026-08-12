@@ -1,5 +1,7 @@
 # hannaAPIv2
 
+OBS: o back-end para termos de aprendizado foi inteiramente feito a mão.
+
 Essa é uma API de busca de perfil do jogo Clash Royale. Em sua segunda versão foi adicionado um layout melhor (Feito por I.A)
 
 <img width="1386" height="629" alt="Screenshot 2026-08-12 182559" src="https://github.com/user-attachments/assets/159ee95d-1342-40f5-9dd7-388820b5c421" />
